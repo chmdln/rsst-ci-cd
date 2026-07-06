@@ -1,0 +1,61 @@
+name: CI Validation
+
+on:
+  push:
+    branches:
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - edited
+      - labeled
+      - unlabeled
+      - assigned
+      - unassigned
+      - review_requested
+      - review_request_removed
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check branch naming convention
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BRANCH_NAME="${{ github.head_ref }}"
+          else
+            BRANCH_NAME="${{ github.ref_name }}"
+          fi
+          echo "Checking branch: $BRANCH_NAME"
+          if [[ ! "$BRANCH_NAME" =~ ^feature/.+ ]]; then
+            echo "::error::Branch '$BRANCH_NAME' does not follow the required 'feature/<name>' naming convention."
+            exit 1
+          fi
+          echo "Branch name is valid."
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build application
+        run: npm run build

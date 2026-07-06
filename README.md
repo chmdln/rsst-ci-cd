@@ -2,6 +2,5 @@
 TypeScript online store project
 
 # CI/CD files: 
-- ci.yml
-- cd.yml 
+- ci/cd workflow files are in the .github/workflows directory.
 

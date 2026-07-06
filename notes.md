@@ -1,0 +1,1 @@
+I found this assignment very interesting, since it was the most practical one. I did not keep an extensive diary, because for this assignment I was primarily following documentation, and reviewing study materials and tutorials to complete it. 

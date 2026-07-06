@@ -1,6 +1,5 @@
 import plants from '../../data/plants.json';
 import Cart from '../components/cart';
-import PurchaseModal from '../components/purchase-modal';
 import Router from '../router';
 import { PagesList } from './enums';
 import { Products } from './types';
@@ -65,9 +64,10 @@ function setBuyNowButton(button: HTMLElement, cart: Cart, plant: Products) {
   }
 }
 
-function openPurchaseModal(cart: Cart) {
+async function openPurchaseModal(cart: Cart) {
   const modalTemp = document.querySelector('#purchase');
   if (modalTemp instanceof HTMLTemplateElement) {
+    const { default: PurchaseModal } = await import('../components/purchase-modal');
     const modal = new PurchaseModal(modalTemp, cart, getExistentElement('.purchase-modal'));
     modal.draw();
   }
